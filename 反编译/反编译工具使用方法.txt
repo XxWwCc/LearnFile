@@ -1,0 +1,5 @@
+1.运行CMD
+2.进入比如app-release.apk所在目录
+	例如:window进入d盘,直接在打开的cmd中输入 d: 就可以了
+3.运行apktool d app-release.apk
+4.默认解压的文件就在app-release.apk所在目录。

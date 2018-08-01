@@ -1,0 +1,47 @@
+1.配置:
+添加依赖:
+dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+}
+添加权限:
+<uses-permission android:name="android.permission.INTERNET"/>
+2.可加以下权限:
+
+//网络不好加载失败联网后可自动重新发起失败的任务
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+//读取已存在的文件
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+3.使用
+(1)Glide.with(this)
+     .load(url)
+     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+     .into(imageview);
+
+(2)RequestOptions requestOptions = new RequestOptions()
+     .placeholder(R.mipmap.ic_launcher)//加载成功之前占位图
+
+     .error(R.mipmap.ic_launcher)	//加载错误之后的错误图
+
+     .override(100,100)//指定图片的尺寸,一般不指定,glide可以自适应
+
+     .fitCenter() //指定图片的缩放类型为fitCenter （等比例缩放图片，宽或者是高等于ImageView的宽或者是高。）
+
+     .centerCrop()  //指定图片的缩放类型为centerCrop （等比例缩放图片，直到图片的狂高都大于等于ImageView的宽度，然后截取中间的显示。）
+
+     .circleCrop()//指定图片的缩放类型为centerCrop （圆形）
+
+     .skipMemoryCache(true)//跳过内存缓存
+
+     .diskCacheStrategy(DiskCacheStrategy.ALL);//缓存所有版本的图像
+Glide.with(this)
+     .load(url)
+     .apply(requestOptions)
+     .into(imageview);
+
+(3)加载本地图片源
+Glide.with(this)
+     .load(R.drawable.smoker)
+     .into(imageview);

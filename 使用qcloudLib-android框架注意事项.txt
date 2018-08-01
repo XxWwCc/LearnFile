@@ -1,0 +1,46 @@
+前提:所建项目与框架文件qcloudLib-android处于同一文件夹下
+
+1.在项目的app文件夹下的build.gradle的dependencies中添加需要的依赖
+	implementation project(':qcloudLib-android:qclib')
+	testImplementation 'junit:junit:4.12'
+
+2.在settings.gradle中,添加
+	include ':qcloudLib-android'
+	project(':qcloudLib-android').projectDir = new File('../qcloudLib-android/')
+	include ':qcloudLib-android:qclib'
+
+3.在项目的app外的build.gradle中添加
+// 定义全局版本号
+ext {
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.2'
+    minSdkVersion = 16
+    targetSdkVersion = 26
+    supportLibraryVersion = '26.1.0'
+    versionCode = 1
+    versionName = '1.0.0'
+
+    //lib版本
+    qclib_versionCode = 1
+    qclib_versionName = '1.0.0'
+
+    //library版本
+    jjdxm_minSdkVersion = 14
+    jjdxm_versionCode = 1
+    jjdxm_versionName = '1.0.0'
+    jjdxm_v4 = 'com.android.support:support-v4:23.3.0'
+    jjdxm_v7 = 'com.android.support:appcompat-v7:26.1.0'
+
+    var = [
+            support_v7 : 'com.android.support:appcompat-v7:$supportLibraryVersion',
+            support_v4 : 'com.android.support:support-v4:$supportLibraryVersion',
+            recyclerview_v7 : 'com.android.support:recyclerview-v7:$supportLibraryVersion'
+    ]
+}
+
+4.注意事项:
+最好修改项目的
+compileSdkVersion 26
+targetSdkVersion 26
+implementation 'com.android.support:appcompat-v7:26.0.0'
+即保持他们与项目依赖的一致(ext中)
