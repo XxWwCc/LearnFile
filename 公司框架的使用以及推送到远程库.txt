@@ -1,0 +1,75 @@
+1.setting.gradle中添加
+
+include ':qcloudLib-kotlin'
+project(':qcloudLib-kotlin').projectDir = new File('../qcloudLib-kotlin/')
+include ':qcloudLib-kotlin:qclib'
+
+2.拷贝config.gradle
+
+3.在app文件夹外的build.gradle中第一行加  apply from: "config.gradle" 
+在bulidscript中添加 ext.anko_version = '0.10.5' 使kotlin能在活动中直接用xml的id调用控件
+在dependencies中添加  classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+
+4.app文件夹中的build.gradle
+
+添加依赖（其他依赖可删除）：
+    testImplementation 'junit:junit:4.12'
+    implementation project(':qcloudLib-kotlin:qclib')
+    implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.anko:anko-support-v4:$anko_version"
+    // 解决Android 5.0以下的方法超限
+    implementation 'com.android.support:multidex:1.0.3'
+
+在android{}中添加
+
+compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+在defaultConfig{}中删除其他替换为
+
+	applicationId "com.qicloud.helloworld"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
+
+        ndk {
+            moduleName"native"
+            abiFilters"armeabi","armeabi-v7a"//, "mips", "mips64", "arm64-v8a"
+        }
+compileSdkVersion、buildToolsVersion更改为
+
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+
+5.若要提交到远程
+1）在项目的.gitignore中添加  /.idea
+忽略idea文件
+2）右键选择 Git在这里创建版本库->确定
+->右键选择添加->确定->提交->确定->推送->在目标选框中选择管理远端->在URL框中填入远程厂库的HTTP地址->确定
